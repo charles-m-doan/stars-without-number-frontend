@@ -8,14 +8,18 @@ This is the client-side viewing app for the stars-without-number API.
 npm install
 ```
 
-### Next, run a basic Jest test to make sure things were installed properly
+### Next, run a basic Jest test to make sure things were installed properly:
 
 ```
 npm run test
 ```
 
-### Finally, host the file with Parcel to make sure the "Hello Universe" example runs correctly
+#### *break out of jest with CTRL + C*
+
+### Finally, host the file with Parcel to make sure the "Hello Universe" example runs correctly:
 
 ```
 npm run dev
 ```
+
+#### *visit localhost:1234 to verify*
