@@ -1,20 +1,29 @@
 {
-  "name": "stars-without-number-frontend",
-  "version": "1.0.0",
-  "description": "This is the client-side viewing app for the stars-without-number API.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/charles-m-doan/stars-without-number-frontend.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/charles-m-doan/stars-without-number-frontend/issues"
-  },
-  "homepage": "https://github.com/charles-m-doan/stars-without-number-frontend#readme"
+	"name": "stars-without-number-frontend",
+	"version": "1.0.0",
+	"description": "This is the client-side viewing app for the stars-without-number API.",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest ./test --colors --coverage --watch",
+		"dev": "parcel ./src/index.html",
+		"build": "parcel build ./src/index.html"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/charles-m-doan/stars-without-number-frontend.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/charles-m-doan/stars-without-number-frontend/issues"
+	},
+	"homepage": "https://github.com/charles-m-doan/stars-without-number-frontend#readme",
+	"devDependencies": {
+		"@babel/core": "^7.5.5",
+		"@babel/preset-env": "^7.5.5",
+		"babel-jest": "^24.8.0",
+		"jest": "^24.8.0",
+		"parcel-bundler": "^1.12.3"
+	}
 }

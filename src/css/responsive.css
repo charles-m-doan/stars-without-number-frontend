@@ -1,0 +1,5 @@
+@media (min-width: 400px) {
+	:root {
+		--main-width: 90%;
+	}
+}
