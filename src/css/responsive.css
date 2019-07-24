@@ -3,3 +3,9 @@
 		--main-width: 90%;
 	}
 }
+
+@media (min-width: 1052px) {
+	.header {
+		flex-direction: row;
+	}
+}
