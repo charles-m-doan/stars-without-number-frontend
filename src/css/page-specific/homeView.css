@@ -1,9 +1,55 @@
 .wrapper {
-	background-color: var(--muted);
+	background-image: url("../../images/swn_background.jpg");
 }
 
 .header {
+	color: var(--white);
 	background-color: var(--primary);
+	box-shadow: 0rem 0rem 1rem 0.2rem var(--black);
+	z-index: 999;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	padding: 0.5rem;
+}
+
+.header__nav {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 0rem 2rem;
+	padding-right: 8rem;
+}
+
+.nav-list {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.nav-list__item {
+	font-size: 1.8rem;
+	margin: 0rem 1.2rem;
+	padding: 0.2rem 0rem;
+}
+
+.nav-list__item a {
+	padding: 0rem 1rem;
+	color: var(--white);
+	background-color: var(--tertiary);
+	border: 2px solid var(--secondary);
+}
+
+.nav-list__item a:hover {
+	font-weight: bold;
+	color: var(--secondary);
+	background-color: var(--complement);
+	border-color: var(--white);
+	box-shadow: 0rem 0rem 1rem 0.2rem var(--complement);
 }
 
 .logo {
@@ -20,7 +66,14 @@
 }
 
 .main {
-	background-color: var(--white);
+	background-image: linear-gradient(
+		90deg,
+		var(--transparent),
+		var(--white) 5%,
+		var(--white) 95%,
+		var(--transparent)
+	);
+
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -28,14 +81,18 @@
 }
 
 .cover-image {
-	padding: 2rem;
+	margin: 2rem;
+	padding: 0.3rem;
 	width: 60%;
+	box-shadow: 0rem 0rem 1.5rem 0.2rem var(--black);
 }
 
 .footer {
 	min-height: 10vh;
 	color: var(--secondary);
 	background-color: var(--tertiary);
+	box-shadow: 0rem 0rem 1rem 0.2rem var(--black);
+	z-index: 999;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
