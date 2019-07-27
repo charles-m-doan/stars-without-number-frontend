@@ -11,7 +11,7 @@
 			type="image/x-icon"
 		/>
 		<link rel="stylesheet" href="../css/common.css" />
-
+		<link rel="stylesheet" href="../css/singleSheetView.css" />
 		<!-- Note: "responsive.css" should always come last. -->
 		<link rel="stylesheet" href="../css/responsive.css" />
 	</head>
@@ -37,9 +37,48 @@
 				</nav>
 			</header>
 			<main class="main">
-				<figure class="cover-image">
-					<img src="../images/cover.jpg" />
-				</figure>
+				<div class="sheet-wrapper">
+					<h3 class="sheet-title">Stars Without Number Character Sheet</h3>
+					<article class="sheet">
+						<header class="sheet__section sheet__header">
+							<h2 class="sheet__header__name">Character Name</h2>
+							<h2 class="sheet__header__class">Character Class</h2>
+						</header>
+
+						<div class="sheet__column">
+							<section class="sheet__section sheet__bio">
+								<h1>BIO</h1>
+							</section>
+							<section class="sheet__section sheet__foci">
+								<h1>FOCI</h1>
+							</section>
+						</div>
+
+						<div class="sheet__column">
+							<section class="sheet__section sheet__attributes">
+								<h1>ATTRIBUTES</h1>
+							</section>
+
+							<section class="sheet__section sheet__saves">
+								<h1>SAVING THROWS</h1>
+							</section>
+
+							<section class="sheet__section sheet__skills">
+								<h1>SKILLS</h1>
+							</section>
+						</div>
+
+						<div class="sheet__column">
+							<section class="sheet__section sheet__progression">
+								<h1>PROGRESSION</h1>
+							</section>
+
+							<section class="sheet__section sheet__condition">
+								<h1>CONDITION</h1>
+							</section>
+						</div>
+					</article>
+				</div>
 			</main>
 			<footer class="footer">
 				<h1>
