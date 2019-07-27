@@ -1,3 +1,4 @@
+import cover from "../../images/cover.jpg";
 import Html from "../Utils/HTMLWrapper";
 import Api from "../Utils/Api";
 
@@ -82,6 +83,10 @@ export default class ComponentManager {
 					.create("a")
 					.addAttribute("href", "homeBlock")
 					.text("Home")
+					.click(event => {
+						event.preventDefault();
+						this.renderContentBlock("homeBlock", "");
+					})
 			);
 
 		const itemNewSheet = Html()
@@ -92,6 +97,10 @@ export default class ComponentManager {
 					.create("a")
 					.addAttribute("href", "newSheetBlock")
 					.text("New Sheet")
+					.click(event => {
+						event.preventDefault();
+						this.renderContentBlock("newSheetBlock", "");
+					})
 			);
 
 		const itemSeeAll = Html()
@@ -102,6 +111,10 @@ export default class ComponentManager {
 					.create("a")
 					.addAttribute("href", "allSheetsBlock")
 					.text("See All")
+					.click(event => {
+						event.preventDefault();
+						this.renderContentBlock("allSheetsBlock", "");
+					})
 			);
 
 		navList.addChild(itemHome);
@@ -139,18 +152,23 @@ export default class ComponentManager {
 		if (blockType === undefined) {
 			blockType = "homeBlock";
 		}
-		console.log(
-			"Rendering content block: " + blockType + " using data: " + requestedData
-		);
+		// console.log(
+		// 	"Rendering content block: " + blockType + " using data: " + requestedData
+		// );
+
 		// Branch Based on Block Type
 		if (blockType == "homeBlock") {
 			this.renderContentBlockHome();
+			// console.log("render home block");
 		} else if (blockType == "allSheetsBlock") {
-			// this.renderContentBlockAllSheets();
+			this.renderContentBlockAllSheets();
+			// console.log("render all sheets block");
+		} else if (blockType == "newSheetBlock") {
+			this.renderContentBlockNewSheet(requestedData);
+			// console.log("new sheet block");
 		} else if (blockType == "singleSheetBlock") {
 			// this.renderContentBlockSingleSheet();
-		} else if (blockType == "newSheetBlock") {
-			// this.renderContentBlockNewSheet(requestedData);
+			// console.log("single sheet block");
 		} else {
 			// this.renderContentBlockHome();
 		}
@@ -158,14 +176,15 @@ export default class ComponentManager {
 
 	// =========================================================================================
 
-	// HOME BLOCK
+	// HOME BLOCK ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	renderContentBlockHome(requestedData) {
 		if (requestedData === undefined) {
 			requestedData = "";
 		}
-		const rootDataURL = Api().getRootURL() + "artists";
+		const rootDataURL = Api().getRootURL() + "home";
 		const resourceURL = rootDataURL + "/" + requestedData;
+		console.log("Block URL: " + rootDataURL);
 
 		const main = Html().select(".main");
 		const content = this.generateContentHome(resourceURL);
@@ -180,6 +199,119 @@ export default class ComponentManager {
 			.create("h2")
 			.addClass("main-content__title")
 			.text("Welcome to Our Character Generator!");
+
+		const coverFigure = Html()
+			.create("figure")
+			.addClass("cover-image")
+			.addChild(
+				Html()
+					.create("img")
+					.addAttribute("src", cover)
+			);
+
+		mainContent.addChild(mainContentTitle);
+		mainContent.addChild(coverFigure);
+		return mainContent;
+	}
+
+	// ALL SHEETS BLOCK ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	renderContentBlockAllSheets(requestedData) {
+		if (requestedData === undefined) {
+			requestedData = "";
+		}
+		const rootDataURL = Api().getRootURL() + "sheets";
+		const resourceURL = rootDataURL + "/" + requestedData;
+		console.log("Block URL: " + rootDataURL);
+
+		const main = Html().select(".main");
+		const content = this.generateContentAllSheets(resourceURL);
+		main.replace(content);
+	}
+
+	generateContentAllSheets(resourceURL) {
+		const mainContent = Html()
+			.create("div")
+			.addClass("main-content");
+		const mainContentTitle = Html()
+			.create("h2")
+			.addClass("main-content__title")
+			.text("All Character Sheets");
+
+		const characterCardGallery = this.generateCharacterCardGallery();
+
+		mainContent.addChild(mainContentTitle);
+		mainContent.addChild(characterCardGallery);
+		return mainContent;
+	}
+
+	generateCharacterCardGallery() {
+		const cardGallery = Html()
+			.create("section")
+			.addClass("character-card-gallery");
+
+		for (let i = 0; i < 20; i++) {
+			const characterCard = Html()
+				.create("article")
+				.addClass("character-card");
+
+			const characterName = Html()
+				.create("h2")
+				.addClass("character__name")
+				.text("Character " + (i + 1));
+			characterCard.addChild(characterName);
+
+			const description = Html()
+				.create("div")
+				.addClass("character__description");
+			characterCard.addChild(description);
+
+			const levelLabel = Html()
+				.create("h4")
+				.text("Level");
+			description.addChild(levelLabel);
+
+			const levelValue = Html()
+				.create("h4")
+				.addClass("character__description__level")
+				.text(1 + Math.floor(Math.random() * 20));
+			description.addChild(levelValue);
+
+			const characterClass = Html()
+				.create("h3")
+				.addClass("character__description__class")
+				.text("Class " + i);
+			description.addChild(characterClass);
+
+			cardGallery.addChild(characterCard);
+		}
+
+		return cardGallery;
+	}
+
+	// NEW SHEET BLOCK +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	renderContentBlockNewSheet(requestedData) {
+		if (requestedData === undefined) {
+			requestedData = "";
+		}
+		const rootDataURL = Api().getRootURL() + "sheets/new";
+		const resourceURL = rootDataURL + "/" + requestedData;
+		console.log("Block URL: " + rootDataURL);
+
+		const main = Html().select(".main");
+		const content = this.generateContentNewSheet(resourceURL);
+		main.replace(content);
+	}
+
+	generateContentNewSheet(resourceURL) {
+		const mainContent = Html()
+			.create("div")
+			.addClass("main-content");
+		const mainContentTitle = Html()
+			.create("h2")
+			.addClass("main-content__title")
+			.text("New Character Sheet");
 
 		mainContent.addChild(mainContentTitle);
 		return mainContent;

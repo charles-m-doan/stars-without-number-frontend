@@ -1,7 +1,7 @@
-.card-gallery {
+.character-card-gallery {
 	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
 	grid-gap: 2rem;
 	padding: 2rem;
 }
@@ -33,7 +33,7 @@
 	padding: 0.1em;
 }
 
-.character-card__level-label {
+.character__description {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
@@ -42,12 +42,12 @@
 	padding: 0.1em;
 }
 
-.level-label__value {
+.character__description__level {
 	font-weight: bold;
 	padding: 0rem 0.5em;
 }
 
-.character__class {
+.character__description__class {
 	color: var(--white);
 	padding: 0.2em;
 }
