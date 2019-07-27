@@ -1,17 +1,32 @@
+/* PRIMARY CONTENT SKELETON */
+/* The below is for layout and styling of the main content areas, but not the specific content itself. 
+Main content areas include the page-wrapper, header/nav, main, and footer. */
+
 .wrapper {
-	background-image: url("../../images/swn_background.jpg");
+	/* Never allow the wrapper to grow larger than the viewport */
+	max-width: 100vw;
+	/* Force wrapper to take up at least as much vertical space as the viewport height*/
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	z-index: -999;
+	background-image: url("../images/swn_background.jpg");
 }
 
 .header {
-	color: var(--white);
-	background-color: var(--primary);
-	box-shadow: 0rem 0rem 1rem 0.2rem var(--black);
-	z-index: 999;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start;
 	padding: 0.5rem;
+
+	z-index: 999;
+	color: var(--white);
+	background-color: var(--primary);
+	box-shadow: 0rem 0rem 1rem 0.2rem var(--black);
 }
 
 .header__nav {
@@ -67,6 +82,13 @@
 }
 
 .main {
+	width: var(--main-width);
+	flex-grow: 1; /* using flex-grow here makes the main take up remaining free space, pushing the footer to the bottom of the container if the content wouldn't otherwise do so. */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+
 	background-image: linear-gradient(
 		90deg,
 		var(--transparent),
@@ -74,28 +96,24 @@
 		var(--white) 95%,
 		var(--transparent)
 	);
-
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-around;
 }
 
 .cover-image {
+	width: 60%;
 	margin: 2rem;
 	padding: 0.3rem;
-	width: 60%;
 	box-shadow: 0rem 0rem 1.5rem 0.2rem var(--black);
 }
 
 .footer {
+	width: 100%;
 	min-height: 10vh;
-	color: var(--secondary);
-	background-color: var(--tertiary);
-	box-shadow: 0rem 0rem 1rem 0.2rem var(--black);
-	z-index: 999;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;
+	z-index: 999;
+	color: var(--secondary);
+	background-color: var(--tertiary);
+	box-shadow: 0rem 0rem 1rem 0.2rem var(--black);
 }
