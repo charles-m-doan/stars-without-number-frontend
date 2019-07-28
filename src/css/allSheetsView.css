@@ -1,7 +1,7 @@
 .character-card-gallery {
 	width: 100%;
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
 	grid-gap: 2rem;
 	padding: 2rem;
 }
@@ -39,12 +39,16 @@
 	justify-content: space-around;
 	align-items: center;
 	color: var(--white);
-	padding: 0.1em;
+}
+
+.character__description__level-label {
+	font-weight: bold;
+	padding-left: 0.5em;
 }
 
 .character__description__level {
 	font-weight: bold;
-	padding: 0rem 0.5em;
+	padding-left: 0.5em;
 }
 
 .character__description__class {

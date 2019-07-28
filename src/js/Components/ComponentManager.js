@@ -159,22 +159,60 @@ export default class ComponentManager {
 		// Branch Based on Block Type
 		if (blockType == "homeBlock") {
 			this.renderContentBlockHome();
-			// console.log("render home block");
 		} else if (blockType == "allSheetsBlock") {
 			this.renderContentBlockAllSheets();
-			// console.log("render all sheets block");
 		} else if (blockType == "newSheetBlock") {
-			this.renderContentBlockNewSheet(requestedData);
-			// console.log("new sheet block");
+			this.renderContentBlockNewSheet();
 		} else if (blockType == "singleSheetBlock") {
-			// this.renderContentBlockSingleSheet();
-			// console.log("single sheet block");
+			this.renderContentBlockSingleSheet(requestedData);
 		} else {
 			// this.renderContentBlockHome();
 		}
 	}
 
 	// =========================================================================================
+
+	// SINGLE SHEET BLOCK +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	renderContentBlockSingleSheet(requestedData) {
+		if (requestedData === undefined) {
+			requestedData = "";
+		}
+		const rootDataURL = Api().getRootURL() + "characters";
+		const resourceURL = rootDataURL + "/" + requestedData;
+		console.log("Block URL: " + resourceURL);
+
+		const main = Html().select(".main");
+		const content = this.generateContentSingleSheet(resourceURL);
+		main.replace(content);
+	}
+
+	generateContentSingleSheet(resourceURL) {
+		const mainContent = Html()
+			.create("div")
+			.addClass("main-content");
+		const mainContentTitle = Html()
+			.create("h2")
+			.addClass("main-content__title")
+			.text("Viewing Character Sheet");
+
+		const rawJSONParagraph = this.generateRawCharacterDataParagraph(
+			resourceURL
+		);
+
+		mainContent.addChild(mainContentTitle);
+		mainContent.addChild(rawJSONParagraph);
+		return mainContent;
+	}
+
+	generateRawCharacterDataParagraph(resourceURL) {
+		const rawJSONParagraph = Html().create("p");
+
+		Api().getRequest(resourceURL, character => {
+			rawJSONParagraph.html(JSON.stringify(character));
+		});
+		return rawJSONParagraph;
+	}
 
 	// HOME BLOCK ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -220,7 +258,7 @@ export default class ComponentManager {
 		if (requestedData === undefined) {
 			requestedData = "";
 		}
-		const rootDataURL = Api().getRootURL() + "sheets";
+		const rootDataURL = Api().getRootURL() + "characters";
 		const resourceURL = rootDataURL + "/" + requestedData;
 		console.log("Block URL: " + rootDataURL);
 
@@ -238,53 +276,96 @@ export default class ComponentManager {
 			.addClass("main-content__title")
 			.text("All Character Sheets");
 
-		const characterCardGallery = this.generateCharacterCardGallery();
+		const characterCardGallery = this.generateCharacterCardGallery(resourceURL);
 
 		mainContent.addChild(mainContentTitle);
 		mainContent.addChild(characterCardGallery);
 		return mainContent;
 	}
 
-	generateCharacterCardGallery() {
+	generateCharacterCardGallery(resourceURL) {
 		const cardGallery = Html()
 			.create("section")
 			.addClass("character-card-gallery");
 
-		for (let i = 0; i < 20; i++) {
-			const characterCard = Html()
-				.create("article")
-				.addClass("character-card");
+		Api().getRequest(resourceURL, characterCollection => {
+			characterCollection.forEach(character => {
+				const characterCard = Html()
+					.create("article")
+					.addClass("character-card")
+					.click(event => {
+						event.preventDefault();
+						this.renderContentBlock("singleSheetBlock", character.id);
+					});
 
-			const characterName = Html()
-				.create("h2")
-				.addClass("character__name")
-				.text("Character " + (i + 1));
-			characterCard.addChild(characterName);
+				const characterName = Html()
+					.create("h2")
+					.addClass("character__name")
+					.text(character.name);
+				characterCard.addChild(characterName);
 
-			const description = Html()
-				.create("div")
-				.addClass("character__description");
-			characterCard.addChild(description);
+				const description = Html()
+					.create("div")
+					.addClass("character__description");
+				characterCard.addChild(description);
 
-			const levelLabel = Html()
-				.create("h4")
-				.text("Level");
-			description.addChild(levelLabel);
+				const levelLabel = Html()
+					.create("h4")
+					.addClass("character__description__level-label")
+					.text("Level");
+				description.addChild(levelLabel);
 
-			const levelValue = Html()
-				.create("h4")
-				.addClass("character__description__level")
-				.text(1 + Math.floor(Math.random() * 20));
-			description.addChild(levelValue);
+				const levelValue = Html()
+					.create("h4")
+					.addClass("character__description__level")
+					.text(character.level);
+				description.addChild(levelValue);
 
-			const characterClass = Html()
-				.create("h3")
-				.addClass("character__description__class")
-				.text("Class " + i);
-			description.addChild(characterClass);
+				const characterClass = Html()
+					.create("h3")
+					.addClass("character__description__class")
+					.text(character.career.typeName);
+				description.addChild(characterClass);
 
-			cardGallery.addChild(characterCard);
-		}
+				cardGallery.addChild(characterCard);
+			});
+		});
+
+		// for (let i = 0; i < 20; i++) {
+		// 	const characterCard = Html()
+		// 		.create("article")
+		// 		.addClass("character-card");
+
+		// 	const characterName = Html()
+		// 		.create("h2")
+		// 		.addClass("character__name")
+		// 		.text("Character " + (i + 1));
+		// 	characterCard.addChild(characterName);
+
+		// 	const description = Html()
+		// 		.create("div")
+		// 		.addClass("character__description");
+		// 	characterCard.addChild(description);
+
+		// 	const levelLabel = Html()
+		// 		.create("h4")
+		// 		.text("Level");
+		// 	description.addChild(levelLabel);
+
+		// 	const levelValue = Html()
+		// 		.create("h4")
+		// 		.addClass("character__description__level")
+		// 		.text(1 + Math.floor(Math.random() * 20));
+		// 	description.addChild(levelValue);
+
+		// 	const characterClass = Html()
+		// 		.create("h3")
+		// 		.addClass("character__description__class")
+		// 		.text("Class " + i);
+		// 	description.addChild(characterClass);
+
+		// 	cardGallery.addChild(characterCard);
+		// }
 
 		return cardGallery;
 	}
@@ -295,7 +376,7 @@ export default class ComponentManager {
 		if (requestedData === undefined) {
 			requestedData = "";
 		}
-		const rootDataURL = Api().getRootURL() + "sheets/new";
+		const rootDataURL = Api().getRootURL() + "characters/new";
 		const resourceURL = rootDataURL + "/" + requestedData;
 		console.log("Block URL: " + rootDataURL);
 
