@@ -15,13 +15,15 @@
 }
 
 .sheet__section {
-	margin: 0.1rem 0rem;
+	margin: 0.3rem 0.1rem;
 	padding: 0.2rem;
 	background-color: var(--white);
 	border: 1px solid var(--neutral-light);
 }
 
 .sheet__header {
+	width: 80%;
+	margin: 0 auto;
 	padding-left: 2rem;
 	padding-right: 2rem;
 	grid-column-start: 1;
@@ -29,7 +31,16 @@
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: space-around;
+	border: 1px solid var(--neutral);
+}
+
+.sheet__header__name {
+	font-weight: bold;
+}
+
+.sheet__header__class {
+	font-style: italic;
 }
 
 /* GRID CELL STYLING */
@@ -48,12 +59,12 @@
 	border: 1px solid var(--neutral);
 	min-width: 2em;
 	min-height: 1em;
-	resize: none;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .grid-cell__label {
 	background-color: var(--neutral-light);
-	white-space: nowrap;
 }
 
 .grid-cell__value {
@@ -90,6 +101,10 @@
 	grid-gap: 0.2em;
 }
 
+.attribute-label {
+	text-transform: uppercase;
+}
+
 /* PROGRESSION */
 
 .sheet__progression {
@@ -102,7 +117,7 @@
 
 .sheet__status {
 	display: grid;
-	grid-template-columns: min-content 1fr min-content min-content;
+	grid-template-columns: min-content 1fr min-content 1fr;
 	grid-gap: 0.2em;
 }
 
