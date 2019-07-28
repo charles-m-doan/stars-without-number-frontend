@@ -10,7 +10,6 @@ const blockTypes = [
 
 console.log("Starting App!");
 let componentManager = new ComponentManager();
-// componentManager.renderPageSkeleton();
-// componentManager.renderContentBlock("homeBlock", "");
+componentManager.renderContentBlock("homeBlock", "");
 // componentManager.renderContentBlock("allSheetsBlock", "");
-componentManager.renderContentBlock("singleSheetBlock", "1");
+// componentManager.renderContentBlock("singleSheetBlock", "1");

@@ -191,8 +191,8 @@ export default class ComponentManager {
 	}
 
 	generateContentSingleSheet(character) {
-		const contentEditable = true;
-		const tbd = "...";
+		const contentEditable = false;
+		const tbd = "-";
 
 		const mainContent = Html()
 			.create("div")
