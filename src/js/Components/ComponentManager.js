@@ -183,27 +183,416 @@ export default class ComponentManager {
 		console.log("Block URL: " + resourceURL);
 
 		const main = Html().select(".main");
-		const content = this.generateContentSingleSheet(resourceURL);
-		main.replace(content);
+
+		Api().getRequest(resourceURL, character => {
+			const content = this.generateContentSingleSheet(character);
+			main.replace(content);
+		});
 	}
 
-	generateContentSingleSheet(resourceURL) {
+	generateContentSingleSheet(character) {
+		const contentEditable = true;
+		const tbd = "...";
+
 		const mainContent = Html()
 			.create("div")
 			.addClass("main-content");
 		const mainContentTitle = Html()
 			.create("h2")
 			.addClass("main-content__title")
-			.text("Viewing Character Sheet");
-
-		const rawJSONParagraph = this.generateRawCharacterDataParagraph(
-			resourceURL
-		);
-
+			.text("Stars Without Number Character Sheet");
 		mainContent.addChild(mainContentTitle);
-		mainContent.addChild(rawJSONParagraph);
+
+		const sheet = Html()
+			.create("article")
+			.addClass("sheet");
+		mainContent.addChild(sheet);
+
+		const sheetHeader = Html()
+			.create("header")
+			.addClass("sheet__section")
+			.addClass("sheet__header");
+		sheet.addChild(sheetHeader);
+
+		const sheetHeaderName = Html()
+			.create("h2")
+			.addClass("sheet__header__name")
+			.text(character.name);
+		sheetHeader.addChild(sheetHeaderName);
+
+		const sheetHeaderClass = Html()
+			.create("h2")
+			.addClass("sheet__header__class")
+			.text(character.career.typeName);
+		sheetHeader.addChild(sheetHeaderClass);
+
+		// CREATE COLUMNS ------------------------------
+		const leftColumn = Html()
+			.create("div")
+			.addClass("sheet__column");
+		sheet.addChild(leftColumn);
+
+		const middleColumn = Html()
+			.create("div")
+			.addClass("sheet__column");
+		sheet.addChild(middleColumn);
+
+		const rightColumn = Html()
+			.create("div")
+			.addClass("sheet__column");
+		sheet.addChild(rightColumn);
+		// ---------------------------------------------
+
+		// BIO SECTION
+		const bioSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__biography");
+		leftColumn.addChild(bioSection);
+		const bioFields = [
+			"Background",
+			"Homeworld",
+			"Faction",
+			"Species",
+			"Employer"
+		];
+		for (let i = 0; i < bioFields.length; i++) {
+			const gridCellLabel = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__label")
+				.text(bioFields[i]);
+			const gridCellValue = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__value")
+				.text(tbd)
+				.addAttribute("contenteditable", contentEditable);
+			bioSection.addChild(gridCellLabel).addChild(gridCellValue);
+		}
+
+		// FOCI SECTION
+		const fociSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__foci");
+		leftColumn.addChild(fociSection);
+		const fociLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("FOCI");
+		const fociLvlLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Lvl");
+		fociSection.addChild(fociLabel).addChild(fociLvlLabel);
+
+		for (let i = 0; i < 2 * 10; i++) {
+			const gridCellValue = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__value")
+				.text(tbd)
+				.addAttribute("contenteditable", contentEditable);
+			fociSection.addChild(gridCellValue);
+		}
+
+		//ATTRIBUTES SECTION
+		const attributesSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__attributes");
+		middleColumn.addChild(attributesSection);
+		const attributesHeader = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.text("Attributes");
+		attributesSection.addChild(attributesHeader);
+
+		character.attributes.forEach(attribute => {
+			const attributeLabel = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__label")
+				.addClass("attribute-label")
+				.text(attribute.typeName.substring(0, 3));
+			attributesSection.addChild(attributeLabel);
+
+			const attributeValue = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__value")
+				.text(attribute.value)
+				.addAttribute("contenteditable", contentEditable);
+			attributesSection.addChild(attributeValue);
+
+			const attributeModifier = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__value")
+				.text(
+					attribute.modifier > 0 ? "+" + attribute.modifier : attribute.modifier
+				);
+			attributesSection.addChild(attributeModifier);
+		});
+
+		// SAVING THROWS SECTION
+		const savesSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__saves");
+		middleColumn.addChild(savesSection);
+		const savesHeader = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.text("Saving Throws");
+		savesSection.addChild(savesHeader);
+
+		const physicalLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Physical");
+		savesSection.addChild(physicalLabel);
+		const evasionLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Evasion");
+		savesSection.addChild(evasionLabel);
+		const mentalLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Mental");
+		savesSection.addChild(mentalLabel);
+
+		const physicalValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		savesSection.addChild(physicalValue);
+		const evasionValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		savesSection.addChild(evasionValue);
+		const mentalValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		savesSection.addChild(mentalValue);
+
+		// SKILLS SECTION
+		const skillsSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__skills");
+		middleColumn.addChild(skillsSection);
+		const skillsHeader = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.text("Skills");
+		skillsSection.addChild(skillsHeader);
+
+		const skillTypes = [
+			"Administer",
+			"Connect",
+			"Exert",
+			"Fix",
+			"Heal",
+			"Know",
+			"Lead",
+			"Notice",
+			"Perform",
+			"Pilot",
+			"Program",
+			"Punch",
+			"Shoot",
+			"Sneak",
+			"Stab",
+			"Survive",
+			"Talk",
+			"Trade",
+			"Work",
+			"Biopsionics",
+			"Metapsionics",
+			"Precognition",
+			"Telekinesis",
+			"Telepathy",
+			"Teleportation"
+		];
+
+		skillTypes.forEach(skill => {
+			const skillLabel = Html()
+				.create("h4")
+				.addClass("grid-cell")
+				.addClass("grid-cell__label")
+				.text(skill);
+			skillsSection.addChild(skillLabel);
+			const skillValue = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__value")
+				.text(tbd)
+				.addAttribute("contenteditable", contentEditable);
+			skillsSection.addChild(skillValue);
+			console.log(skill);
+		});
+
+		// PROGRESSION SECTION
+		const progressionSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__progression");
+		rightColumn.addChild(progressionSection);
+		const progressionHeader = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.text("Progression");
+		progressionSection.addChild(progressionHeader);
+
+		const charLvlLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Lvl");
+		const charLvlValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(character.level)
+			.addAttribute("contenteditable", contentEditable);
+		progressionSection.addChild(charLvlLabel).addChild(charLvlValue);
+
+		const xpLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Experience");
+		const xpValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(character.experience)
+			.addAttribute("contenteditable", contentEditable);
+		progressionSection.addChild(xpLabel).addChild(xpValue);
+
+		const hdLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("HD");
+		const hdValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		progressionSection.addChild(hdLabel).addChild(hdValue);
+
+		const skillPtsLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Skill Pts/Lvl");
+		const skillPtsValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		progressionSection.addChild(skillPtsLabel).addChild(skillPtsValue);
+
+		// STATUS SECTION
+		const statusSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__status");
+		rightColumn.addChild(statusSection);
+
+		const hpHeader = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.text("Hit Points");
+		statusSection.addChild(hpHeader);
+		const currentHPLabel = Html()
+			.create("h4")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Current");
+		const currentHPValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		statusSection.addChild(currentHPLabel).addChild(currentHPValue);
+		const maxHPLabel = Html()
+			.create("h4")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Max");
+		const maxHPValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		statusSection.addChild(maxHPLabel).addChild(maxHPValue);
+
+		const conditionsHeader = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.text("Conditions");
+		statusSection.addChild(conditionsHeader);
+		const conditionsValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__span-value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		statusSection.addChild(conditionsValue);
+
+		const sysStrainLabel = Html()
+			.create("h4")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Sys Strain");
+		const sysStrainValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		statusSection.addChild(sysStrainLabel).addChild(sysStrainValue);
+		const permLabel = Html()
+			.create("h4")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Permanent");
+		const permValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text(tbd)
+			.addAttribute("contenteditable", contentEditable);
+		statusSection.addChild(permLabel).addChild(permValue);
+
 		return mainContent;
 	}
+
+	//------------------------------------------------------------------------
+	//------------------------------------------------------------------------
+	//------------------------------------------------------------------------
 
 	generateRawCharacterDataParagraph(resourceURL) {
 		const rawJSONParagraph = Html().create("p");
@@ -330,42 +719,6 @@ export default class ComponentManager {
 				cardGallery.addChild(characterCard);
 			});
 		});
-
-		// for (let i = 0; i < 20; i++) {
-		// 	const characterCard = Html()
-		// 		.create("article")
-		// 		.addClass("character-card");
-
-		// 	const characterName = Html()
-		// 		.create("h2")
-		// 		.addClass("character__name")
-		// 		.text("Character " + (i + 1));
-		// 	characterCard.addChild(characterName);
-
-		// 	const description = Html()
-		// 		.create("div")
-		// 		.addClass("character__description");
-		// 	characterCard.addChild(description);
-
-		// 	const levelLabel = Html()
-		// 		.create("h4")
-		// 		.text("Level");
-		// 	description.addChild(levelLabel);
-
-		// 	const levelValue = Html()
-		// 		.create("h4")
-		// 		.addClass("character__description__level")
-		// 		.text(1 + Math.floor(Math.random() * 20));
-		// 	description.addChild(levelValue);
-
-		// 	const characterClass = Html()
-		// 		.create("h3")
-		// 		.addClass("character__description__class")
-		// 		.text("Class " + i);
-		// 	description.addChild(characterClass);
-
-		// 	cardGallery.addChild(characterCard);
-		// }
 
 		return cardGallery;
 	}
