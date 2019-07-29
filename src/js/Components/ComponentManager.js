@@ -152,9 +152,6 @@ export default class ComponentManager {
 		if (blockType === undefined) {
 			blockType = "homeBlock";
 		}
-		// console.log(
-		// 	"Rendering content block: " + blockType + " using data: " + requestedData
-		// );
 
 		// Branch Based on Block Type
 		if (blockType == "homeBlock") {
@@ -166,11 +163,50 @@ export default class ComponentManager {
 		} else if (blockType == "singleSheetBlock") {
 			this.renderContentBlockSingleSheet(requestedData);
 		} else {
-			// this.renderContentBlockHome();
+			this.renderContentBlockHome();
 		}
 	}
 
 	// =========================================================================================
+
+	// HOME BLOCK ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	renderContentBlockHome() {
+		const rootDataURL = Api().getRootURL() + "home";
+		// console.log("Block URL: " + rootDataURL);
+
+		const main = Html().select(".main");
+		const content = this.generateContentHome();
+		main.replace(content);
+	}
+
+	generateContentHome() {
+		const mainContent = Html()
+			.create("div")
+			.addClass("main-content");
+		const mainContentTitle = Html()
+			.create("h2")
+			.addClass("main-content__title")
+			.text("Welcome to Our Character Generator!");
+
+		const coverFigure = Html()
+			.create("figure")
+			.addClass("cover-image")
+			.addChild(
+				Html()
+					.create("img")
+					.addAttribute("src", cover)
+			);
+
+		mainContent.addChild(mainContentTitle);
+		mainContent.addChild(
+			Html()
+				.create("h2")
+				.text("(a work in progress)")
+		);
+		mainContent.addChild(coverFigure);
+		return mainContent;
+	}
 
 	// SINGLE SHEET BLOCK +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -180,7 +216,7 @@ export default class ComponentManager {
 		}
 		const rootDataURL = Api().getRootURL() + "characters";
 		const resourceURL = rootDataURL + "/" + requestedData;
-		console.log("Block URL: " + resourceURL);
+		// console.log("Block URL: " + resourceURL);
 
 		const main = Html().select(".main");
 
@@ -445,7 +481,6 @@ export default class ComponentManager {
 				.text(tbd)
 				.addAttribute("contenteditable", contentEditable);
 			skillsSection.addChild(skillValue);
-			console.log(skill);
 		});
 
 		// PROGRESSION SECTION
@@ -590,57 +625,6 @@ export default class ComponentManager {
 		return mainContent;
 	}
 
-	//------------------------------------------------------------------------
-	//------------------------------------------------------------------------
-	//------------------------------------------------------------------------
-
-	generateRawCharacterDataParagraph(resourceURL) {
-		const rawJSONParagraph = Html().create("p");
-
-		Api().getRequest(resourceURL, character => {
-			rawJSONParagraph.html(JSON.stringify(character));
-		});
-		return rawJSONParagraph;
-	}
-
-	// HOME BLOCK ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	renderContentBlockHome(requestedData) {
-		if (requestedData === undefined) {
-			requestedData = "";
-		}
-		const rootDataURL = Api().getRootURL() + "home";
-		const resourceURL = rootDataURL + "/" + requestedData;
-		console.log("Block URL: " + rootDataURL);
-
-		const main = Html().select(".main");
-		const content = this.generateContentHome(resourceURL);
-		main.replace(content);
-	}
-
-	generateContentHome(resourceURL) {
-		const mainContent = Html()
-			.create("div")
-			.addClass("main-content");
-		const mainContentTitle = Html()
-			.create("h2")
-			.addClass("main-content__title")
-			.text("Welcome to Our Character Generator!");
-
-		const coverFigure = Html()
-			.create("figure")
-			.addClass("cover-image")
-			.addChild(
-				Html()
-					.create("img")
-					.addAttribute("src", cover)
-			);
-
-		mainContent.addChild(mainContentTitle);
-		mainContent.addChild(coverFigure);
-		return mainContent;
-	}
-
 	// ALL SHEETS BLOCK ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	renderContentBlockAllSheets(requestedData) {
@@ -649,7 +633,7 @@ export default class ComponentManager {
 		}
 		const rootDataURL = Api().getRootURL() + "characters";
 		const resourceURL = rootDataURL + "/" + requestedData;
-		console.log("Block URL: " + rootDataURL);
+		// console.log("Block URL: " + rootDataURL);
 
 		const main = Html().select(".main");
 		const content = this.generateContentAllSheets(resourceURL);
@@ -731,7 +715,7 @@ export default class ComponentManager {
 		}
 		const rootDataURL = Api().getRootURL() + "characters/new";
 		const resourceURL = rootDataURL + "/" + requestedData;
-		console.log("Block URL: " + rootDataURL);
+		// console.log("Block URL: " + rootDataURL);
 
 		const main = Html().select(".main");
 		const content = this.generateContentNewSheet(resourceURL);
@@ -746,11 +730,185 @@ export default class ComponentManager {
 			.create("h2")
 			.addClass("main-content__title")
 			.text("New Character Sheet");
-
 		mainContent.addChild(mainContentTitle);
+
+		// CREATE SHEET ------------------------------
+		const sheet = Html()
+			.create("article")
+			.addClass("sheet");
+		mainContent.addChild(sheet);
+
+		// CREATE COLUMNS ------------------------------
+		const leftColumn = Html()
+			.create("div")
+			.addClass("sheet__column");
+		sheet.addChild(leftColumn);
+
+		const middleColumn = Html()
+			.create("div")
+			.addClass("sheet__column");
+		sheet.addChild(middleColumn);
+
+		const rightColumn = Html()
+			.create("div")
+			.addClass("sheet__column");
+		sheet.addChild(rightColumn);
+		// ---------------------------------------------
+
+		// INPUT SECTION
+		const inputSection = Html()
+			.create("section")
+			.addClass("sheet__section")
+			.addClass("sheet__biography");
+		middleColumn.addChild(inputSection);
+
+		const inputValueElements = [];
+
+		const nameCellLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Name");
+		const nameCellValue = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.text("")
+			.addAttribute("contenteditable", true);
+		inputSection.addChild(nameCellLabel).addChild(nameCellValue);
+		inputValueElements.push(nameCellValue);
+
+		const classCellLabel = Html()
+			.create("h3")
+			.addClass("grid-cell")
+			.addClass("grid-cell__label")
+			.text("Class");
+		const classCellValue = Html()
+			.create("select")
+			.addClass("grid-cell")
+			.addClass("grid-cell__value")
+			.addChild(
+				Html()
+					.create("option")
+					.addAttribute("value", "0")
+					.text("Warrior")
+			)
+			.addChild(
+				Html()
+					.create("option")
+					.addAttribute("value", "1")
+					.text("Expert")
+			)
+			.addChild(
+				Html()
+					.create("option")
+					.addAttribute("value", "2")
+					.text("Psychic")
+			)
+			.addChild(
+				Html()
+					.create("option")
+					.addAttribute("value", "3")
+					.text("Warrior-Expert")
+			)
+			.addChild(
+				Html()
+					.create("option")
+					.addAttribute("value", "4")
+					.text("Psychic-Expert")
+			)
+			.addChild(
+				Html()
+					.create("option")
+					.addAttribute("value", "5")
+					.text("Psychic-Warrior")
+			);
+
+		inputSection.addChild(classCellLabel).addChild(classCellValue);
+		inputValueElements.push(classCellValue);
+
+		const rollButton = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.addClass("input__button")
+			.text("Roll Stats")
+			.click(event => {
+				this.renderContentBlockNewSheet();
+			});
+		inputSection.addChild(rollButton);
+
+		const attributeFieldLabels = [
+			"Strength",
+			"Dexterity",
+			"Constitution",
+			"Intelligence",
+			"Wisdom",
+			"Charisma"
+		];
+		for (let i = 0; i < attributeFieldLabels.length; i++) {
+			const gridCellLabel = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__label")
+				.text(attributeFieldLabels[i]);
+			const gridCellValue = Html()
+				.create("h3")
+				.addClass("grid-cell")
+				.addClass("grid-cell__value")
+				.text(this.rollRandomStatValue());
+			inputValueElements.push(gridCellValue);
+			inputSection.addChild(gridCellLabel).addChild(gridCellValue);
+		}
+
+		const inputButton = Html()
+			.create("h3")
+			.addClass("grid-header")
+			.addClass("input__button")
+			.text("Create Character")
+			.click(event => {
+				this.postCreateCharacter(inputValueElements);
+			});
+		inputSection.addChild(inputButton);
 		return mainContent;
+	}
+
+	postCreateCharacter(inputValueElements) {
+		const characterName = inputValueElements[0].text();
+		if (characterName === "") {
+			console.log("Must specify a name!");
+			this.renderContentBlockNewSheet();
+			return;
+		}
+		const careerTypeValue = inputValueElements[1].render().value;
+
+		console.log(inputValueElements[2].text());
+
+		Api().postRequest(
+			"http://localhost:8080/api/characters",
+			{
+				name: characterName,
+				careerType: careerTypeValue,
+				strength: inputValueElements[2].text(),
+				dexterity: inputValueElements[3].text(),
+				constitution: inputValueElements[4].text(),
+				intelligence: inputValueElements[5].text(),
+				wisdom: inputValueElements[6].text(),
+				charisma: inputValueElements[7].text()
+			},
+			() => {
+				this.renderContentBlockAllSheets();
+			}
+		);
 	}
 
 	// =========================================================================================
 	// =========================================================================================
+
+	rollRandomStatValue() {
+		const die1 = 1 + Math.floor(Math.random() * 6);
+		const die2 = 1 + Math.floor(Math.random() * 6);
+		const die3 = 1 + Math.floor(Math.random() * 6);
+		const sum = die1 + die2 + die3;
+		return sum;
+	}
 }
