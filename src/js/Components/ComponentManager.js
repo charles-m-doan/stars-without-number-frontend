@@ -199,11 +199,6 @@ export default class ComponentManager {
 			);
 
 		mainContent.addChild(mainContentTitle);
-		mainContent.addChild(
-			Html()
-				.create("h2")
-				.text("(a work in progress)")
-		);
 		mainContent.addChild(coverFigure);
 		return mainContent;
 	}

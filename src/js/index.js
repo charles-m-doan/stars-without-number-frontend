@@ -8,9 +8,5 @@ const blockTypes = [
 	"newSheetBlock"
 ];
 
-console.log("Starting App!");
-let componentManager = new ComponentManager();
-// componentManager.renderContentBlock("homeBlock", "");
-// componentManager.renderContentBlock("allSheetsBlock", "");
-// componentManager.renderContentBlock("singleSheetBlock", "1");
-componentManager.renderContentBlock("newSheetBlock", "");
+const componentManager = new ComponentManager();
+componentManager.renderContentBlock("homeBlock", "");
